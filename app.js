@@ -22,12 +22,13 @@ require('dotenv').config();
 //     optionsSuccessStatus: 200,
 // };
 app.use(
-    cors({
-      origin: ["http://localhost:8080", "https://stellar-custard-0ecaf1.netlify.app"], // Netlify 배포 주소
+  cors({
+      origin: ["http://localhost:8080", "https://stellar-custard-0ecaf1.netlify.app"],
       methods: ["GET", "POST", "PUT", "DELETE"],
       credentials: true,
-    })
-  );
+  })
+);
+
 
 
 app.use(bodyParser.urlencoded({ extended: false }));

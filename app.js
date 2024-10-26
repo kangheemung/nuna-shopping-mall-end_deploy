@@ -7,6 +7,8 @@ const indexRouter = require('./routes/index');
 require('dotenv').config();
 const allowedOrigins = ['http://localhost:3000', 'http://localhost:8080', 'https://stellar-custard-0ecaf1.netlify.app'];
 
+
+
 const corsOptions = {
     origin: (origin, callback) => {
         if (!origin || allowedOrigins.includes(origin)) {

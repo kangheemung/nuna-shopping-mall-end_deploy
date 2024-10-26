@@ -38,7 +38,7 @@ const mongoURI = process.env.LOCAL_DB_ADDRESS;
 //mongoose　셋팅
 
 mongoose
-    .connect(mongoURI, { useNewUrlParser: true })
+    .connect(mongoURI, { useNewUrlParser: true , useUnifiedTopology: true })
     .then(() => console.log('mongoose connected'))
     .catch((err) => console.log('DB connected error', err));
 //port

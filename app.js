@@ -5,32 +5,29 @@ const cors = require('cors');
 const app = express();
 const indexRouter = require('./routes/index');
 require('dotenv').config();
-// const allowedOrigins = ['http://localhost:3000', 'http://localhost:8080', 'https://stellar-custard-0ecaf1.netlify.app'];
+const allowedOrigins = ['http://localhost:3000', 'http://localhost:8080', 'https://stellar-custard-0ecaf1.netlify.app'];
 
+const corsOptions = {
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true,
+    optionsSuccessStatus: 200,
+};
+// app.use(
+//   cors({
+//       origin: ["http://localhost:8080", "https://stellar-custard-0ecaf1.netlify.app"],
+//       methods: ["GET", "POST", "PUT", "DELETE"],
+//       credentials: true,
+//   })
+// );
 
-
-// const corsOptions = {
-//     origin: (origin, callback) => {
-//         if (!origin || allowedOrigins.includes(origin)) {
-//             callback(null, true);
-//         } else {
-//             callback(new Error('Not allowed by CORS'));
-//         }
-//     },
-//     methods: ['GET', 'POST', 'PUT', 'DELETE'],
-//     credentials: true,
-//     optionsSuccessStatus: 200,
-// };
-app.use(
-  cors({
-      origin: ["http://localhost:8080", "https://stellar-custard-0ecaf1.netlify.app"],
-      methods: ["GET", "POST", "PUT", "DELETE"],
-      credentials: true,
-  })
-);
-
-
-
+app.use(cors(corsOptions));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json()); //res.body가 객체로 인식 된다.
 

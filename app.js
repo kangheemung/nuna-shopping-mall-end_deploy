@@ -18,7 +18,7 @@ const corsOptions = {
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
     optionsSuccessStatus: 200,
-    allowedHeaders: ['Content-Type', 'authorization'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
     preflightContinue: true,
 };
 // app.use(
@@ -45,4 +45,3 @@ mongoose
 app.listen(process.env.PORT || 8080, () => {
     console.log('server on');
 });
-

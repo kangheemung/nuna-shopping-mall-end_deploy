@@ -32,10 +32,25 @@ authController.authenticate = async (req, res, next) => {
             if (err) throw new Error('invalid token');
             req.userId = payload._id; // 토큰에서 사용자 ID 추출 후 저장 => req에 담아서 next로 보내기
         });
+
         next(); // 다음 미들웨어로 이동
     } catch (err) {
         return res.status(400).json({ status: 'fail', error: err.message });
     }
 };
+//checks admin user
 
+authController.checkAdminPermission = async (req, res, next) => {
+    try {
+        const { userId } = req;
+        //토큰 값에서 유저를 찾아라
+        const user = await User.findById(userId);
+
+        // if(user.level !== "admin") throw new Error("no permission")
+
+        next();
+    } catch (err) {
+        return res.status(400).json({ status: 'fail', error: err.message });
+    }
+};
 module.exports = authController;

@@ -4,6 +4,7 @@ const productSchema = Schema(
     {
         sku: { type: String, require: true, unique: true },
         name: { type: String, require: true },
+        size: { type: Array, required: true },
         image: { type: String, require: true },
         price: { type: Number, require: true },
         description: { type: String, require: true },
@@ -18,5 +19,6 @@ productSchema.methods.toJSON = function () {
     const obj = this._doc;
     return obj;
 };
-const Product = mongoose.model('.productSchema');
+const Product = mongoose.model('Product', productSchema);
+
 module.exports = Product;

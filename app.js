@@ -19,6 +19,7 @@ const corsOptions = {
     credentials: true,
     optionsSuccessStatus: 200,
     allowedHeaders: ['Content-Type', 'authorization'],
+    preflightContinue: true,
 };
 // app.use(
 //   cors({
@@ -31,7 +32,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json()); //res.body가 객체로 인식 된다.
-
+app.options('*', cors(corsOptions));
 app.use('/api', indexRouter);
 const mongoURI = process.env.LOCAL_DB_ADDRESS;
 //mongoose　셋팅
@@ -44,3 +45,4 @@ mongoose
 app.listen(process.env.PORT || 8080, () => {
     console.log('server on');
 });
+

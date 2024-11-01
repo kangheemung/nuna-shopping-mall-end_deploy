@@ -46,7 +46,7 @@ authController.checkAdminPermission = async (req, res, next) => {
         //토큰 값에서 유저를 찾아라
         const user = await User.findById(userId);
 
-        // if(user.level !== "admin") throw new Error("no permission")
+        if (user.level !== 'admin') throw new Error('no permission');
 
         next();
     } catch (err) {

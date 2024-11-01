@@ -9,7 +9,7 @@ const userSchema = Schema(
         password: { type: String, required: true },
         name: { type: String, required: true },
         //권한 관리
-        level: { type: String, default: 'customer', enum: ['customer', 'admin'], required: true }, //2typs: customer, admin
+        level: { type: String, enum: ['customer', 'admin'], default: 'customer' }, //2typs: customer, admin
     },
     { timestamps: true }
 );

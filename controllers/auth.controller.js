@@ -8,7 +8,7 @@ const authController = {};
 authController.loginWithEmail = async (req, res) => {
     try {
         const { email, password } = req.body;
-        let user = await User.findOne({ email }, '-createdAt -updatedAt -__v');
+        let user = await User.findOne({ email });
         if (user) {
             const isMatch = await bcrypt.compare(password, user.password);
             if (isMatch) {

@@ -9,7 +9,7 @@ const userSchema = Schema(
         password: { type: String, required: true },
         name: { type: String, required: true },
         //권한 관리
-        level: { type: String, enum: ['customer', 'admin'], default: 'customer' }, //2typs: customer, admin
+        level: { type: String, default: 'customer' }, //2typs: customer, admin
     },
     { timestamps: true }
 );
@@ -18,6 +18,7 @@ userSchema.methods.toJSON = function () {
     delete obj.password;
     delete obj.__v;
     delete obj.updateAt;
+    delete obj.createAt;
     return obj;
 };
 //유저와 관련이 있는 목록 같이 메서드 정리

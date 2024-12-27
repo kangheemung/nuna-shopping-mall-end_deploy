@@ -1,6 +1,5 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
-
 const userController = {};
 
 userController.createUser = async (req, res) => {
@@ -12,11 +11,12 @@ userController.createUser = async (req, res) => {
         }
         const salt = await bcrypt.genSaltSync(10);
         const hash = await bcrypt.hashSync(password, salt);
-
-        const newUser = new User({ name, email, password: hash, level: level : level?level: 'customer' }); // Updated line to use default value for level
-
+        const newUser = new User({
+             name,
+             email,
+             password,
+             level: level ? level : 'customer' }); // Updated line to use default value for level
         await newUser.save();
-
         return res.status(200).json({ status: 'success', user, token });
     } catch (err) {
         return res.status(400).json({ status: 'fail', error: err.message });

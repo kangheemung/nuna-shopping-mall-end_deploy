@@ -12,10 +12,11 @@ userController.createUser = async (req, res) => {
         const salt = await bcrypt.genSaltSync(10);
         const hash = await bcrypt.hashSync(password, salt);
         const newUser = new User({
-             name,
-             email,
-             password,
-             level: level ? level : 'customer' }); // Updated line to use default value for level
+            name,
+            email,
+            password: hash,
+            level: level ? level : 'customer',
+        }); // Updated line to use default value for level
         await newUser.save();
         return res.status(200).json({ status: 'success', user, token });
     } catch (err) {
@@ -24,7 +25,10 @@ userController.createUser = async (req, res) => {
 };
 userController.getUser = async (req, res) => {
     try {
-        const { userId } = req;
+        const { userId } = req.body;
+        if (!userId) {
+            throw new Error('User ID not provided');
+        }
         const user = await User.findById(userId);
         if (user) {
             return res.status(200).json({ status: 'success', user, token });

@@ -4,7 +4,7 @@ const productController = require('../controllers/product.controller');
 const router = express.Router();
 
 router.post('/', authController.authenticate,
- authController.checkAdminPermission,
-  productController.createProduct);
+authController.checkAdminPermission,
+productController.createProduct);
 
 module.exports = router;

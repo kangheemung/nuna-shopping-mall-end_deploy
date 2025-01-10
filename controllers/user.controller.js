@@ -18,7 +18,8 @@ userController.createUser = async (req, res) => {
             level: level ? level : 'customer',
         }); // Updated line to use default value for level
         await newUser.save();
-        return res.status(200).json({ status: 'success', user, token });
+        const token = newUser.generateToken();
+        return res.status(200).json({ status: 'success', user: newUser, token });
     } catch (err) {
         return res.status(400).json({ status: 'fail', error: err.message });
     }
@@ -31,6 +32,7 @@ userController.getUser = async (req, res) => {
         }
         const user = await User.findById(userId);
         if (user) {
+            const token = user.generateToken();
             return res.status(200).json({ status: 'success', user, token });
         }
         throw new Error('Invalid token');

@@ -42,12 +42,9 @@ authController.authenticate = async (req, res, next) => {
 
 authController.checkAdminPermission = async (req, res, next) => {
     try {
-        const { userId } = req;
-        //토큰 값에서 유저를 찾아라
+        const { userId } = req;//토큰 값에서 유저를 찾아라
         const user = await User.findById(userId);
-
         if (user.level !== 'admin') throw new Error('no permission');
-
         next();
     } catch (err) {
         return res.status(400).json({ status: 'fail', error: err.message });

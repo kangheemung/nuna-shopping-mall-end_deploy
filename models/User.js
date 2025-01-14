@@ -9,7 +9,7 @@ const userSchema = Schema(
         email: { type: String, required: true, unique: true },
         //lowercase: true, trim: true },
         password: { type: String, required: true },
-        name: { type: true, required: true },
+        name: { type: String, required: true },
         //권한 관리
         level: { type: String, default: 'customer' }, //2typs: customer, admin
     },
@@ -17,6 +17,9 @@ const userSchema = Schema(
 );
 userSchema.methods.toJSON = function () {
     const obj = this._doc;
+    delete obj.name;
+    delete obj.level;
+    delete obj._id;
     delete obj.password;
     delete obj.__v;
     delete obj.updatedAt;

@@ -1,6 +1,7 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 const userController = {};
 userController.createUser = async (req, res) => {
     try {
@@ -18,7 +19,8 @@ userController.createUser = async (req, res) => {
             level: level ? level : 'customer',
         }); // Updated line to use default value for level
         await newUser.save();
-        return res.status(200).json({ status: 'success' });
+        const token = await newUser.generateToken();
+        return res.status(200).json({ status: 'success', user: newUser, token });
     } catch (err) {
         return res.status(400).json({ status: 'fail', error: err.message });
     }

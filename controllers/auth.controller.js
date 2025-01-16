@@ -28,7 +28,6 @@ authController.authenticate = async (req, res, next) => {
         if (!tokenString) throw new Error('token not found');
 
         const token = tokenString.replace('Bearer ', '');
-
         jwt.verify(token, JWT_SECRET_KEY, (err, payload) => {
             if (err) throw new Error('invalid token');
             req.userId = payload._id; // 토큰에서 사용자 ID 추출 후 저장 => req에 담아서 next로 보내기

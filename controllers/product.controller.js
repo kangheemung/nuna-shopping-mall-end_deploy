@@ -6,7 +6,17 @@ const productController = {};
 productController.createProduct = async (req, res) => {
     try {
         const { sku, name, size, image, price, description, stock, category, status } = req.body;
-        const product = new Product({ sku, name, size, image, price, description, stock, category, status });
+        const product = new Product({
+            sku,
+            name,
+            size,
+            image,
+            price,
+            description,
+            stock,
+            category,
+            status
+        });
         await product.save();
         res.status(200).json({ status: 'success', product });
     } catch (err) {

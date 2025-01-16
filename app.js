@@ -3,11 +3,9 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const app = express();
-
 const indexRouter = require('./routes/index');
 require('dotenv').config();
 const allowedOrigins = ['http://localhost:3000', 'http://localhost:8080', 'https://stellar-custard-0ecaf1.netlify.app'];
-
 const corsOptions = {
     origin: (origin, callback) => {
         if (!origin || allowedOrigins.includes(origin)) {
@@ -29,7 +27,6 @@ const corsOptions = {
 //       credentials: true,
 //   })
 // );
-
 app.use(cors(corsOptions));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json()); //res.body가 객체로 인식 된다.
@@ -39,7 +36,7 @@ const mongoURI = process.env.LOCAL_DB_ADDRESS;
 //mongoose 셋팅
 
 mongoose
-    .connect(mongoURI, { useNewUrlParser: true })
+    .connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('mongoose connected'))
     .catch((err) => console.log('DB connected fail', err));
 //port

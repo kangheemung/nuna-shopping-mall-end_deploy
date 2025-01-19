@@ -38,7 +38,6 @@ authController.authenticate = async (req, res, next) => {
     }
 };
 //checks admin user
-
 authController.checkAdminPermission = async (req, res, next) => {
     try {
         const { userId } = req;//토큰 값에서 유저를 찾아라

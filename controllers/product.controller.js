@@ -24,10 +24,10 @@ productController.createProduct = async (req, res) => {
 };
 productController.getProducts = async (req, res) => {
     try {
-        const {page,name}= req.query
-        const cond =name?{name:{$regex:name,$option:"i"}}:{}
-        let query =Product.find(cond)
-        const productList=await query.exec();
+        const { page, name } = req.query;
+        const cond = name ? { name: { $regex: name, $options: 'i' } } : {};
+        let query = Product.find(cond);
+        const productList = await query.exec();
         // if (name){
         //     const products =await Product.find({name:{$regex:name,$option:"i"}})
         // }else {
@@ -40,8 +40,8 @@ productController.getProducts = async (req, res) => {
         //         products=awaitProduct.find().limit;
         //     }
         //}
-        const products = await Product.find({});
-        res.status(200).json({ status: 'succuss', data: products });
+        // const products = await Product.find({});
+        res.status(200).json({ status: 'succuss', data: productList });
     } catch (err) {
         return res.status(400).json({ status: 'fail', error: err.message });
     }

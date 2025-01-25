@@ -1,6 +1,5 @@
 const express = require('express');
 const Product = require('../models/Product');
-
 const productController = {};
 const PAGE_SIZE = 1;
 productController.createProduct = async (req, res) => {
@@ -25,35 +24,26 @@ productController.createProduct = async (req, res) => {
 productController.getProducts = async (req, res) => {
     try {
         const { page, name } = req.query;
-
-        const cond = name ? { name: { $regex: name, $options: 'i' }, isDeleted: false } : { isDeleted: false };
+        ///重複条件をまとめてやる
+        let cond = name ? { name: { $regex: name, $options: 'i' } } : {};
         let query = Product.find(cond);
-        let res = { status: 'success' };
-        if (page) {
-            query = query.skip((page - 1) * PAGE_SIZE).limit(5); //最後の5データを見せる
-            //最終何ページがあるか
-            // 全データページデータが何データあるか
-            const totalItemNum = await Product.find(cond).count();
-            // 全てのデータ個数
-            const totalPageNum = Math.ceil(totalItemNum / PAGE_SIZE);
-            res.totalPageNum = totalPageNum;
-        }
-        const productList = await query.exec();
-        res.data = productList;
-        // if (name){
-        //     const products =await Product.find({name:{$regex:name,$option:"i"}})
-        // }else {
-        //     const products=await Product.find({});
+        // if (page) {
+        //     query.skip((page - 1) * PAGE_SIZE).limit(PAGE_SIZE);
+        //     const totalItemNum = await Product.find(cond).count();
+        //     const totalPageNum = Math.ceil(totalItemNum / PAGE_SIZE);
+        //     response.data = productList;
         // }
-        // else if(page){
-        //     if (name){
-        //         const products =await Product.find({name:{$regex:name,$option:"i"}}).limit();
-        //     }else{
-        //         products=awaitProduct.find().limit;
-        //     }
-        //}
-        // const products = await Product.find({});
-        return res.status(200).json(res);
+        // if (name) {
+        //     const products = await Product.find({ name: { $regex: name, $options: 'i' } });
+        // } else {
+        //     const products = await Product.find({});
+        // }
+
+        // let response = { status: 'success' };
+
+        const productList = await query.exec();
+        // response.data = productList;
+        return res.status(200).json({ data: productList });
     } catch (err) {
         return res.status(400).json({ status: 'fail', error: err.message });
     }

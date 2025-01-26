@@ -40,7 +40,7 @@ productController.getProducts = async (req, res) => {
         // }
 
         // let response = { status: 'success' };
-
+        //実行
         const productList = await query.exec();
         // response.data = productList;
         return res.status(200).json({ data: productList });

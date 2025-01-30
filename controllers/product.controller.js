@@ -1,7 +1,7 @@
 const express = require('express');
 const Product = require('../models/Product');
 const productController = {};
-const PAGE_SIZE = 1;
+const PAGE_SIZE = 6;
 productController.createProduct = async (req, res) => {
     try {
         const { sku, name, image, price, description, stock, category, status } = req.body;

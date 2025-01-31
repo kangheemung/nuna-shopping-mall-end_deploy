@@ -2,6 +2,7 @@ const express = require('express');
 const Product = require('../models/Product');
 const productController = {};
 const PAGE_SIZE = 6;
+//商品のデータ作成できます。
 productController.createProduct = async (req, res) => {
     try {
         const { sku, name, image, price, description, stock, category, status } = req.body;
@@ -21,6 +22,7 @@ productController.createProduct = async (req, res) => {
         return res.status(400).json({ status: 'fail', error: err.message });
     }
 };
+//データ持ってくる
 productController.getProducts = async (req, res) => {
     try {
         const { page, name } = req.query;
@@ -44,6 +46,24 @@ productController.getProducts = async (req, res) => {
         const productList = await query.exec();
         response.data = productList;
         return res.status(200).json(response);
+    } catch (err) {
+        return res.status(400).json({ status: 'fail', error: err.message });
+    }
+};
+//データ編集できます。
+productController.updateProduct = async (req, res) => {
+    try {
+        const productId = req.params.id;
+        const { sku, name, image, price, description, stock, category, status } = req.body;
+        const productEdit = await Product.findByIdAndUpdate(
+            { _id: productId },
+            { sku, name, image, price, description, stock, category, status },
+            { new: true }
+        );
+        if (!productEdit) {
+            throw new Error("Item doesn't exist");
+        }
+        res.status(200).json({ status: 'success', data: productEdit });
     } catch (err) {
         return res.status(400).json({ status: 'fail', error: err.message });
     }

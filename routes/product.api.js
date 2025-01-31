@@ -6,4 +6,6 @@ const productController = require('../controllers/product.controller');
 //admin인지 아닌지 확인
 router.post('/', authController.authenticate, authController.checkAdminPermission, productController.createProduct);
 router.get('/', productController.getProducts);
+//管理者のみ修正できます。
+router.put('/:id',authController.authenticate, authController.checkAdminPermission,productController.updateProduct)
 module.exports = router;

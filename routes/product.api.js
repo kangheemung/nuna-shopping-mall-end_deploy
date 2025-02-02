@@ -8,4 +8,5 @@ router.post('/', authController.authenticate, authController.checkAdminPermissio
 router.get('/', productController.getProducts);
 //管理者のみ修正できます。
 router.put('/:id',authController.authenticate, authController.checkAdminPermission,productController.updateProduct)
+router.delete('/:id',authController.authenticate, authController.checkAdminPermission,productController.deleteProduct)
 module.exports = router;

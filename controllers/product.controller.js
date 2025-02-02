@@ -1,7 +1,7 @@
 const express = require('express');
 const Product = require('../models/Product');
 const productController = {};
-const PAGE_SIZE = 6;
+
 //商品のデータ作成できます。
 productController.createProduct = async (req, res) => {
     try {
@@ -27,14 +27,20 @@ productController.getProducts = async (req, res) => {
     try {
         const { page, name } = req.query;
         ///重複条件をまとめてやる
+        const PAGE_SIZE = 8;
+        let skipItems = page ? (page - 1) * PAGE_SIZE : 0;
         let cond = name ? { name: { $regex: name, $options: 'i' } } : {};
         let query = Product.find(cond);
         let response = { status: 'success' };
         if (page) {
-            query.skip((page - 1) * PAGE_SIZE).limit(PAGE_SIZE);
             //const totalItemNum = await Product.find(cond).count();
             const totalItemNum = await Product.countDocuments(cond);
             const totalPageNum = Math.ceil(totalItemNum / PAGE_SIZE);
+            if (skipItems >= totalItemNum) {
+                return res.status(200).json({ status: 'success', data: [], message: 'No more products to display' });
+            }
+
+            query.skip(skipItems).limit(PAGE_SIZE);
             response.totalPageNum = totalPageNum;
         }
         // if (name) {
@@ -68,5 +74,16 @@ productController.updateProduct = async (req, res) => {
         return res.status(400).json({ status: 'fail', error: err.message });
     }
 };
-
+productController.deleteProduct = async (req, res) => {
+    try {
+        const productId = req.params.id;
+        const productDelete = await Product.findByIdAndDelete({ _id: productId, isDeleted: true });
+        if (!productDelete) {
+            throw new Error('Product not found or already deleted');
+        }
+        res.status(200).json({ status: 'success', message: 'Product deleted successfully' });
+    } catch (err) {
+        return res.status(400).json({ status: 'fail', error: err.message });
+    }
+};
 module.exports = productController;

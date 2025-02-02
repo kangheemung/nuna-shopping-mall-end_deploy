@@ -56,6 +56,30 @@ productController.getProducts = async (req, res) => {
         return res.status(400).json({ status: 'fail', error: err.message });
     }
 };
+//データ詳細ページ
+productController.detailProduct = async (req, res) => {
+    try {
+        const productId = req.params.id;
+        const productDetail = await Product.findOne(
+            { _id: productId },
+            {
+                sku: 1,
+                name: 1,
+                image: 1,
+                price: 1,
+                description: 1,
+                stock: 1,
+                category: 1,
+            }
+        );
+        if (!productDetail) {
+            return res.status(404).json({ status: 'fail', message: 'Product not found' });
+        }
+        res.status(200).json({ status: 'success', data: productDetail });
+    } catch (err) {
+        return res.status(400).json({ status: 'fail', error: err.message });
+    }
+};
 //データ編集できます。
 productController.updateProduct = async (req, res) => {
     try {

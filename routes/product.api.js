@@ -6,7 +6,16 @@ const productController = require('../controllers/product.controller');
 //admin인지 아닌지 확인
 router.post('/', authController.authenticate, authController.checkAdminPermission, productController.createProduct);
 router.get('/', productController.getProducts);
+//商品詳細ページ
+router.get('/:id', productController.detailProduct);
+
 //管理者のみ修正できます。
-router.put('/:id',authController.authenticate, authController.checkAdminPermission,productController.updateProduct)
-router.delete('/:id',authController.authenticate, authController.checkAdminPermission,productController.deleteProduct)
+router.put('/:id', authController.authenticate, authController.checkAdminPermission, productController.updateProduct);
+router.delete(
+    '/:id',
+    authController.authenticate,
+    authController.checkAdminPermission,
+    productController.deleteProduct
+);
+
 module.exports = router;

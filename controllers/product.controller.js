@@ -34,9 +34,10 @@ productController.getProducts = async (req, res) => {
         let query = Product.find(cond);
 
         if (page) {
-            query = query.skip(page - 1).limit(PAGE_SIZE);
-            const totalItemNum = await Product.find(cond).count();
-            //const totalItemNum = await Product.countDocuments(cond);
+            const skipItems = (page - 1) * PAGE_SIZE;
+            query = query.skip(skipItems).limit(PAGE_SIZE);
+            //const totalItemNum = await Product.find(cond).count();
+            const totalItemNum = await Product.countDocuments(cond);
             const totalPageNum = Math.ceil(totalItemNum / PAGE_SIZE);
             // if (skipItems >= totalItemNum) {
             //     return res.status(200).json({ status: 'success', data: [], message: 'No more products to display' });
@@ -54,7 +55,7 @@ productController.getProducts = async (req, res) => {
 productController.detailProduct = async (req, res) => {
     try {
         const productId = req.params.id;
-        const productDetail = await Product.findOne(productId);
+        const productDetail = await Product.findById(productId);
         if (!productDetail) throw new Error('No item found');
         res.status(200).json({ status: 'success', data: productDetail });
     } catch (err) {

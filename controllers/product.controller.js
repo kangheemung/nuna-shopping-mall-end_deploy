@@ -19,7 +19,7 @@ productController.createProduct = async (req, res) => {
         await product.save();
         res.status(200).json({ status: 'success', product });
     } catch (err) {
-        return res.status(400).json({ status: 'fail', error: err.message });
+    return res.status(400).json({ status: 'fail', error: err.message });
     }
 };
 //データ持ってくる
@@ -29,10 +29,8 @@ productController.getProducts = async (req, res) => {
         let response = { status: 'success' };
         ///重複条件をまとめてやる
         const PAGE_SIZE = 8;
-
         let cond = name ? { name: { $regex: name, $options: 'i' } } : { isDeleted: false };
         let query = Product.find(cond);
-
         if (page) {
             const skipItems = (page - 1) * PAGE_SIZE;
             query = query.skip(skipItems).limit(PAGE_SIZE);

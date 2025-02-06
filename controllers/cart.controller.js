@@ -2,7 +2,7 @@ const express = require('express');
 const Cart = require('../models/Cart');
 const cardController = {};
 
-cardController.createCard = async (req, res) => {
+cardController.addItemToCart = async (req, res) => {
     try {
         const { userId } = req;
         const { productId, size, qty } = req.body;

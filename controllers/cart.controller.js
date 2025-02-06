@@ -13,9 +13,16 @@ cardController.addItemToCart = async (req, res) => {
             //유저가 만든 카트가 없다 , 만들어 주기
             cart = new Cart({ userId });
             await cart.save();
-        }
+
+        //     res
+        //     .status(200)
+        //     .json({ status: "success", data: cart, cartItemQty: cart.items.length});
+        // } catch (err){
+        //     return res.status(400).json({status:"fail", error: err.message});
+        // }
+    }
         // 이미 카트에 들어가 있는 아이템이냐?productId,size
-        const existItem = cart.items.find(
+       const existItem = cart.items.find(
             //equalsを使う理由mongoose.ObjectId
             (item) => item.productId.equals(productId) && item.size === size
         );
@@ -26,7 +33,7 @@ cardController.addItemToCart = async (req, res) => {
         //카트에 아이템 추가
         cart.items = [...cart.items, { productId, size, qty }];
         await cart.save();
-        res.status(200).json({ status: 'success', data: cart, cartItemQty: cart.items, length });
+        res.status(200).json({ status: 'success', data: cart, cartItemQty: cart.items.length });
     } catch (err) {
         return res.status(400).json({ status: 'fail', error: err.message });
     }

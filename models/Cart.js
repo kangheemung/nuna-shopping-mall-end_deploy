@@ -16,6 +16,7 @@ const cartSchema = Schema(
     },
     { timestamps: true }
 );
+//modelの二重に指定したため、エラー発生したので、気をつけて作成する。
 
 const Cart = mongoose.model('Cart', cartSchema);
 module.exports = Cart;

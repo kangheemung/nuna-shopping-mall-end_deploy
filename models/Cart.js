@@ -9,19 +9,13 @@ const cartSchema = Schema(
         items: [
             {
                 productId: { type: mongoose.ObjectId, ref: Product },
-                size: { type: String, required: [true, 'Size is required'] },
+                size: { type: String, required: true },
                 qty: { type: Number, require: true, default: 1 },
             },
         ],
     },
     { timestamps: true }
 );
-
-cartSchema.methods.toJSON = function () {
-    const obj = this._doc;
-    delete obj.updatedAt;
-    return obj;
-};
 
 const Cart = mongoose.model('Cart', cartSchema);
 module.exports = Cart;

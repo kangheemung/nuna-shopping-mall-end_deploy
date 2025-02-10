@@ -19,7 +19,7 @@ productController.createProduct = async (req, res) => {
         await product.save();
         res.status(200).json({ status: 'success', product });
     } catch (err) {
-    return res.status(400).json({ status: 'fail', error: err.message });
+        return res.status(400).json({ status: 'fail', error: err.message });
     }
 };
 //データ持ってくる
@@ -87,7 +87,9 @@ productController.deleteProduct = async (req, res) => {
         }
         res.status(200).json({ status: 'success', message: 'Product deleted successfully' });
     } catch (err) {
-        return res.status(400).json({ status: 'fail', error: err.message });
+        if (!size) {
+            return res.status(400).json({ status: 'fail', message: 'Size is required' });
+        }
     }
 };
 module.exports = productController;

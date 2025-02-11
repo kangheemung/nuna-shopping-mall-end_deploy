@@ -35,7 +35,24 @@ cartController.addToCart = async (req, res) => {
 cartController.getCart = async (req, res) => {
     try {
         const { userId } = req;
-        const cart = await Cart.findOne({ userId });
+        const cart = await Cart.findOne({ userId }).populate({
+            path: 'items',
+            populate: {
+                path: 'productId',
+                model: 'Product',
+            },
+        });
+        //정보도 같이 들고와 줄래items안에 있는 프로덕트 자세한 정보 .populate
+        // {
+        //     userId: { type: mongoose.ObjectId, ref: User },
+        //     items: [
+        //         {
+        //             productId: { type: mongoose.ObjectId, ref: Product },
+        //             size: { type: String, required: true },
+        //             qty: { type: Number, require: true, default: 1 },
+        //         },
+        //     ],
+        // },
         if (!cart) {
             return res.status(404).json({ status: 'fail', message: 'Cart not found' });
         }

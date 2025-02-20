@@ -6,15 +6,16 @@ const orderSchema = Schema(
     {
         userId: { type: mongoose.ObjectId, ref: User, required: true },
         shipTo: { type: Object, required: true },
-        contact: { type: Object, required: true },
+        contact: { type: Object, required: true},
         totalPrice: { type: Number, default: 0, required: true },
         status: { type: String, default: 'preparing' },
         orderNum: { type: String },
         items: [
             {
-                productId: { type: mongoose.ObjectId, ref: 'Product',required: true  },
+                productId: { type: mongoose.ObjectId, ref: 'Product' },
+                price: { type: Number, required: true },
                 qty: { type: Number, default: 1, required: true },
-                price: { type: Number,  required: true },
+                size: {type: String, required: true},
             },
         ],
     },

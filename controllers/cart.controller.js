@@ -73,31 +73,12 @@ cartController.detailCart = async (req, res) => {
         return res.status(400).json({ status: 'fail', error: error.message });
     }
 };
-cartController.updateCart = async (req, res) => {
-    try {
-        const productId = req.params.id;
-        const { size, qty } = req.body;
-        const cartDetailedit = await Cart.findByIdAndUpdate({ _id: productId }, { size, qty }, { new: true });
-        if (!cartDetailedit) {
-            throw new Error("Item doesn't exist");
-        }
-        res.status(200).json({ status: 'success', data: cartEdit });
-    } catch (error) {
-        return res.status(400).json({ status: 'fail', error: error.message });
-    }
-};
-cartController.editCartItem = async (req, res) => {
+cartController.updateQty = async (req, res) => {
     try {
         const { userId } = req;
         const { id } = req.params;
         const { qty } = req.body;
-        const cart = await Cart.findByIdOne({ userId }).populate({
-            path: 'items',
-            populate: {
-                path: 'productId',
-                model: 'Product',
-            },
-        });
+        const cart = await Cart.findByIdOne({ userId })
         if (!cart) throw new Error('There is no cart for this user');
         const index = cart.items.findIndex((item) => item._id.equals(id));
         if (index === -1) throw new Error('Can not find item');

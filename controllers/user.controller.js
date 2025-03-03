@@ -8,7 +8,7 @@ userController.createUser = async (req, res) => {
         const { name, email, password, level } = req.body;
         const user = await User.findOne({ email });
         if (user) {
-            throw new Error('User already exists');
+            return res.status(400).json({ status: 'fail', message: 'User already exists' });
         }
         const salt = await bcrypt.genSaltSync(10);
         const hash = await bcrypt.hashSync(password, salt);
@@ -20,8 +20,17 @@ userController.createUser = async (req, res) => {
         }); // Updated line to use default value for level
         await newUser.save();
         const token = await newUser.generateToken();
-        return res.status(200).json({ status: 'success', newUser, token });
+        return res.status(200).json({ status: 'success', user: newUser, token });
     } catch (err) {
+        if (
+            error.response &&
+            error.response.status === 400 &&
+            error.response.data.message === 'Duplicate email and name'
+        ) {
+            dispatch(showToastMessage({ message: 'Email and name combination already exists', status: 'error' }));
+        } else {
+            dispatch(showToastMessage({ message: 'Failed to register user', status: 'error' }));
+        }
         return res.status(400).json({ status: 'fail', error: err.message });
     }
 };
@@ -36,6 +45,14 @@ userController.getUser = async (req, res) => {
             return res.status(200).json({ status: 'success', user });
         }
         throw new Error('Invalid token');
+    } catch (err) {
+        return rejectWithValue(error.message);
+    }
+};
+userController.logout = async (req, res) => {
+    try {
+        // Perform any necessary logout actions here (e.g., clearing session data, etc.)
+        return res.status(200).json({ status: 'success', message: 'Logged out successfully' });
     } catch (err) {
         return res.status(400).json({ status: 'fail', error: err.message });
     }

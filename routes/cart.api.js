@@ -3,9 +3,9 @@ const router = express.Router();
 const authController = require('../controllers/auth.controller');
 const cartController = require('../controllers/cart.controller');
 //token
-router.post('/', authController.authenticate, authController.checkAdminPermission, cartController.addToCart);
-router.get('/', authController.authenticate, authController.checkAdminPermission, cartController.getCart);
-router.put('/:id', authController.authenticate, authController.checkAdminPermission, cartController.editCartItem);
-router.get('/qty', authController.authenticate, authController.checkAdminPermission, cartController.getCartQty);
-router.delete('/:id', authController.authenticate, authController.checkAdminPermission, cartController.deleteCartItem);
+router.post('/', authController.authenticate,  cartController.addToCart);
+router.get('/', authController.authenticate,  cartController.getCart);
+router.put('/:id', authController.authenticate,  cartController.editCartItem);
+router.get('/qty', authController.authenticate,  cartController.getCartQty);
+router.delete('/:id', authController.authenticate,  cartController.deleteCartItem);
 module.exports = router;

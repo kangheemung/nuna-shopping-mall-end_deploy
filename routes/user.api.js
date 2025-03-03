@@ -9,4 +9,5 @@ const authController = require('../controllers/auth.controller');
 
 router.post('/', userController.createUser);
 router.get('/me', authController.authenticate, userController.getUser); //토큰이 vaild한 토큰인지 이 token가지고 유저를
+router.post('/logout', userController.logout);
 module.exports = router;

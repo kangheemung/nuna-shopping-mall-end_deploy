@@ -106,25 +106,25 @@ const product = await Product.findById(item.productId)
     product.stock = newStock
     await product.save()
 
-    return { isVerify: true}
+    return {isVerify: true}
 
 }
 productController.checkItemListStock= async(itemList)=>{
     const insufficientStockItems=[];//在庫が不十分なアイテムセーブする予定
     //在庫確認ロジック
-    //비동기를 조금 더 빠르게 처리 
+    //비동기를 조금 더 빠르게 처리
     await Promise.all(itemList.map(async (item) => {
         const stockCheck = await productController.checkStock(item)
         if (stockCheck.isVerify){
             insufficientStockItems.push({item,message:stockCheck.message})
         }
-        return stockCheck
+        return stockCheck;
     }))
-        return insufficientStockItems
+    return insufficientStockItems;
     // const insufficientStockItems = await productController.checkItemListStock(orderList);
     //     if (insufficientStockItems.length > 0) {
     //         const errorMessage = insufficientStockItems.reduce((total, item) => (total += item.message), '');
     //         throw new Error(errorMessage);
     //     }
-}
+};
 module.exports = productController;

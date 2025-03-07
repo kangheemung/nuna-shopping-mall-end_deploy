@@ -16,6 +16,7 @@ const productSchema = Schema(
 );
 productSchema.methods.toJSON = function () {
     const obj = this._doc;
+    delete obj.updateAt;
     return obj;
 };
 const Product = mongoose.model('Product', productSchema);

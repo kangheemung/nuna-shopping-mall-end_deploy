@@ -5,3 +5,4 @@ const randomStringGenerator=()=>{
     return randomString
 }
 //orderNum만들때씀
+module.exports={randomStringGenerator};

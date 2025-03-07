@@ -1,7 +1,5 @@
 const express = require('express');
 const Order = require('../models/Order');
-const auth = require('../models/auth');
-const { model } = require('mongoose');
 const{randomStringGenerator} =require("../utils/randomStringGenerator");
 const productController = require('./product.controller');
 const orderController = {};
@@ -15,8 +13,9 @@ orderController.createOrder = async (req, res) => {
         // 재고가 충분하지 않음 =>에러
         if (insufficientStockItems.length > 0) {
             //errorメッセージ
-            const errorMessage = insufficientStockItems.reduce((total, item) => (total += item.message),
-            ''
+            const errorMessage = insufficientStockItems.reduce(
+                (total, item) => (total += item.message),
+              ""
             );
             throw new Error(errorMessage);
         }
@@ -30,11 +29,13 @@ orderController.createOrder = async (req, res) => {
             totalPrice,
             orderNum: randomStringGenerator(),
         });
-        await new Order.save();
+        await newOrder.save();
 
-        res.status(200).json({status:"success",orderNum:newOrder.orderNum})
+
+        res.status(200).json({status:"success",orderNum: newOrder.orderNum})
     } catch (e) {
-        return res.status(400).json({ status: 'fail', message: error.message });
+        return res.status(400).json({ status: 'fail', message: e.message });
     }
 };
-model.exports = router;
+module.exports = orderController;
+

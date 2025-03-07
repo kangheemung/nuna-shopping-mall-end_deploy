@@ -29,5 +29,5 @@ orderSchema.methods.toJSON = function () {
     delete obj.updatedAt;
     return obj;
   };
-const Order = mongoose.model('Order', OrderSchema);
+const Order = mongoose.model('Order', orderSchema);
 module.exports = Order;

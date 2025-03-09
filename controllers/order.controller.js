@@ -29,7 +29,9 @@ orderController.createOrder = async (req, res) => {
             totalPrice,
             orderNum: randomStringGenerator(),
         });
+
         await newOrder.save();
+       
 
 
         res.status(200).json({status:"success",orderNum: newOrder.orderNum})

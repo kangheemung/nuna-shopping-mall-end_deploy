@@ -1,3 +1,4 @@
+
 const express = require('express');
 const Order = require('../models/Order');
 const{randomStringGenerator} =require("../utils/randomStringGenerator");
@@ -9,7 +10,9 @@ orderController.createOrder = async (req, res) => {
         const { userId } = req; //user
         const { shipTo, contact, orderList, totalPrice } = req.body;
         //在庫確認＆アップデート
-        const insufficientStockItems = await productController.checkItemListStock(orderList)
+        const insufficientStockItems = await productController.checkItemListStock(
+            orderList
+            );
         // 재고가 충분하지 않음 =>에러
         if (insufficientStockItems.length > 0) {
             //errorメッセージ
@@ -31,13 +34,37 @@ orderController.createOrder = async (req, res) => {
         });
 
         await newOrder.save();
-       
+        //save후에 카트를 비우자
 
 
         res.status(200).json({status:"success",orderNum: newOrder.orderNum})
     } catch (e) {
         return res.status(400).json({ status: 'fail', message: e.message });
     }
+
+};
+orderController.getOrder = async (req, res, next) => {
+  try {
+    const { userId } = req;
+    const PAGE_SIZE = 10; 
+    const orderListQuery = Order.find({ userId: userId }).populate({
+      path: "items",
+      populate: {
+        path: "productId",
+        model: "Product",
+        select: "image name",
+      },
+    });
+    const [orderList, totalItemNum] = await Promise.all([
+      orderListQuery,
+      Order.countDocuments({ userId: userId })
+    ]);
+    const totalPageNum = Math.ceil(totalItemNum / PAGE_SIZE);
+    res.status(200).json({ status: "success", data: orderList, totalPageNum });
+  } catch (error) {
+    console.error(error);
+    return res.status(400).json({ status: "fail", error: error.message });
+  }
 };
 module.exports = orderController;
 

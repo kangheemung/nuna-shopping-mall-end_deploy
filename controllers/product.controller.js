@@ -81,7 +81,9 @@ productController.updateProduct = async (req, res) => {
 productController.deleteProduct = async (req, res) => {
     try {
         const productId = req.params.id;
-        const productDelete = await Product.findByIdAndUpdate({ _id: productId }, { isDeleted: true });
+        const productDelete = await Product.findByIdAndUpdate(
+            { _id: productId },
+             { isDeleted: true });
         if (!productDelete) {
             throw new Error('Product not found or already deleted');
         }

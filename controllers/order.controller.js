@@ -43,11 +43,10 @@ orderController.createOrder = async (req, res) => {
     }
 
 };
-
+const PAGE_SIZE = 10; 
 orderController.getOrder = async (req, res, next) => {
   try {
     const { userId } = req;
-    const PAGE_SIZE = 10; 
     const orderListQuery = Order.find({ userId: userId }).populate({
       path: "items",
       populate: {
@@ -77,7 +76,7 @@ orderController.getOrderList = async (req, res, next) => {
         orderNum: { $regex: ordernum, $options: "i" },
       };
     }
-
+    const pageNumber = parseInt(page);
     const orderList = await Order.find(cond)
       .populate("userId")
       .populate({
@@ -88,7 +87,7 @@ orderController.getOrderList = async (req, res, next) => {
           select: "image name",
         },
       })
-      .skip((page - 1) * PAGE_SIZE)
+      .skip((pageNumber - 1) * PAGE_SIZE)
       .limit(PAGE_SIZE);
     const totalItemNum = await Order.find(cond).count();
 

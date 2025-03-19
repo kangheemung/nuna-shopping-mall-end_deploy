@@ -4,6 +4,7 @@ const Order = require('../models/Order');
 const{randomStringGenerator} =require("../utils/randomStringGenerator");
 const productController = require('./product.controller');
 const orderController = {};
+
 orderController.createOrder = async (req, res) => {
     try {
         //프론트엔드에서 데이터 보낸거 받아오기userId,totalPrice,shipTo,contact,orderList
@@ -43,11 +44,11 @@ orderController.createOrder = async (req, res) => {
     }
 
 };
-const PAGE_SIZE = 10; 
-orderController.getOrder = async (req, res, next) => {
+const PAGE_SIZE = 10;
+orderController.getOrder = async (req, res) => {
   try {
     const { userId } = req;
-    const orderListQuery = Order.find({ userId: userId }).populate({
+    const orderList = await Order.find({ userId: userId }).populate({
       path: "items",
       populate: {
         path: "productId",
@@ -55,10 +56,7 @@ orderController.getOrder = async (req, res, next) => {
         select: "image name",
       },
     });
-    const [orderList, totalItemNum] = await Promise.all([
-      orderListQuery,
-      Order.countDocuments({ userId: userId })
-    ]);
+    const totalItemNum =orderList.length;
     const totalPageNum = Math.ceil(totalItemNum / PAGE_SIZE);
     res.status(200).json({ status: "success", data: orderList, totalPageNum });
   } catch (error) {
@@ -66,17 +64,16 @@ orderController.getOrder = async (req, res, next) => {
     return res.status(400).json({ status: "fail", error: error.message });
   }
 };
-orderController.getOrderList = async (req, res, next) => {
+orderController.getOrderList = async (req, res) => {
   try {
-    const { page, ordernum } = req.query;
 
+    const { page, ordernum } = req.query;
     let cond = {};
     if (ordernum) {
       cond = {
         orderNum: { $regex: ordernum, $options: "i" },
       };
     }
-    const pageNumber = parseInt(page);
     const orderList = await Order.find(cond)
       .populate("userId")
       .populate({
@@ -87,9 +84,9 @@ orderController.getOrderList = async (req, res, next) => {
           select: "image name",
         },
       })
-      .skip((pageNumber - 1) * PAGE_SIZE)
+      .skip((page - 1) * PAGE_SIZE)
       .limit(PAGE_SIZE);
-    const totalItemNum = await Order.find(cond).count();
+      const totalItemNum = await Order.countDocuments(cond);
 
     const totalPageNum = Math.ceil(totalItemNum / PAGE_SIZE);
     res.status(200).json({ status: "success", data: orderList, totalPageNum });

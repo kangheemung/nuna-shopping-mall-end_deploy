@@ -29,6 +29,10 @@ const corsOptions = {
 // );
 app.options('*', cors(corsOptions));
 app.use(cors(corsOptions));
+app.use((req, res, next) => {
+    res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+    next();
+});
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json()); //res.body가 객체로 인식 된다.
 app.use('/api', indexRouter);

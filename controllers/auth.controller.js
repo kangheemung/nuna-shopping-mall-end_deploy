@@ -24,9 +24,8 @@ authController.loginWithEmail = async (req, res) => {
 };
 authController.loginWithGoogle = async (req, res) => {
     try {
-       
-        const oAuth2Client = new OAuth2Client(GOOGLE_CLIENT_ID);
         const { token } = req.body;
+        const oAuth2Client = new OAuth2Client(GOOGLE_CLIENT_ID);
         //해석
         const ticket = await oAuth2Client.verifyIdToken({
             idToken: token,

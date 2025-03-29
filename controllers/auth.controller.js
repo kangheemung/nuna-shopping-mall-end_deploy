@@ -42,7 +42,7 @@ authController.loginWithGoogle = async (req, res) => {
             const randomPassword = '' + Math.floor(Math.random() * 100000000);
             const salt = await bcrypt.genSalt(10);
             const newPassword = await bcrypt.hash(randomPassword, salt);
-        }
+    
         user = new User({
             name,
             email,
@@ -50,11 +50,14 @@ authController.loginWithGoogle = async (req, res) => {
         }); // Updated line to use default value for level
         await user.save();
         //토큰 발행
-        const sessionToken = await user.generateToken();
-        res.status(200).json({ status: 'success', user, token: sessionToken });
+    }
+
+    const sessionToken = await user.generateToken();
+    res.status(200).json({ status: 'success', user, token: sessionToken });
         // a.이미 로그인을 한적이 있는 유저 => 로그인 시키고 토큰값 주면 ok
         // b.처음 로그인 시도를 한 유저=> 유저정보 먼저 새로생성 => 토큰값
     } catch (err) {
+        // Handle any errors that occur during the process
         return res.status(400).json({ status: 'fail', error: err.message });
     }
 };
